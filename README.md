@@ -24,18 +24,30 @@ OBS Browser Source → /overlay → /api/counts → YouTube API (direct)
 2. `npm install`
 3. `npm run dev` — open http://localhost:3000/overlay
 
-## Environment variables (set in Vercel → Project Settings → Environment Variables)
+## Configuring YouTube / Facebook credentials
+
+Two ways to do this — pick one, or mix (Redis, i.e. `/setup`, always wins if both are set):
+
+**Option A — `/setup` page (recommended, no redeploy needed to change anything).**
+Visit `https://<project>.vercel.app/setup`, enter the `SETUP_PASSWORD` you set below,
+paste your channel/page URL and API key/token into each form, and hit **Save & Start**.
+It validates against the real API before saving, stores the result in Redis, and never
+echoes the key back to the browser afterward.
+
+**Option B — Vercel Environment Variables** (Project Settings → Environment Variables):
 
 | Variable | Where to get it |
 |---|---|
+| `SETUP_PASSWORD` | Any password you choose — required for `/setup` to work at all (fails closed without it) |
 | `YOUTUBE_API_KEY` | Google Cloud Console → APIs & Services → Credentials (enable "YouTube Data API v3" first) |
-| `YOUTUBE_HANDLE` | Your channel handle, no `@` (e.g. `PAPAZA8`). Resolved to a channel ID once and cached in Redis — set it once, forget it. |
+| `YOUTUBE_HANDLE` | Your channel handle, no `@` (e.g. `PAPAZA8`). Resolved to a channel ID once and cached in Redis. |
 | `YOUTUBE_CHANNEL_ID` | Optional: skip handle resolution entirely if you already know your `UC...` ID. |
-| `FACEBOOK_PAGE_ID` | Your Page's numeric ID |
+| `FACEBOOK_PAGE_ID` | Your Page's numeric ID or username |
 | `FACEBOOK_PAGE_ACCESS_TOKEN` | Long-lived Page Access Token from Graph API Explorer, with `pages_read_engagement` + `pages_show_list` |
-| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Upstash → create a free Redis database → REST API section |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Upstash → create a free Redis database → REST API section (required either way — also used as the `/setup` config store and the TikTok worker bridge) |
 
 The TikTok worker (`tiktok-worker/`) has its own `.env.example` — see `tiktok-worker/README.md`.
+TikTok has no `/setup` form since it needs only a public username, set directly on the worker.
 
 ## Deploying
 
