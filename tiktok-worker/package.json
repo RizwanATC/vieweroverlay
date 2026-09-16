@@ -2,14 +2,14 @@
   "name": "viewcount-tiktok-worker",
   "version": "1.0.0",
   "private": true,
-  "description": "Always-on worker that connects to a TikTok LIVE stream and writes the current viewer count to Upstash Redis for the Vercel overlay to read.",
+  "description": "Always-on worker that connects to a TikTok LIVE stream and writes the current viewer count to Supabase for the Vercel overlay to read.",
   "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "@upstash/redis": "1.38.4",
+    "@supabase/supabase-js": "^2.116.0",
     "tiktok-live-connector": "2.5.0"
   }
 }
